@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+@theme {
+  /* Public site palette */
+  --color-primary: #1a1a2e;
+  --color-secondary: #16213e;
+  --color-surface: #0f3460;
+  --color-accent: #e94560;
+  --color-accent2: #f5a623;
+  --color-win: #48bb78;
+  --color-draw: #a0aec0;
+  --color-loss: #e94560;
+
+  /* Admin palette */
+  --color-admin-bg: #111827;
+  --color-admin-sidebar: #1f2937;
+  --color-admin-accent: #e94560;
+  --color-admin-border: #374151;
+  --color-admin-muted: #6b7280;
+
+  /* Typography */
+  --font-bebas: "Bebas Neue", sans-serif;
+  --font-inter: "Inter", sans-serif;
+  --font-mono: "Roboto Mono", monospace;
+
+  /* Shadows */
+  --shadow-card: 0 4px 24px 0 rgba(0, 0, 0, 0.4);
+  --shadow-panel: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  font-family: var(--font-inter);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: 3px;
+}
+
+/* Bebas Neue headings */
+.font-bebas {
+  font-family: var(--font-bebas);
+  letter-spacing: 0.02em;
+}
+
+/* Score / numeric display */
+.font-score {
+  font-family: var(--font-mono);
+}
+
+/* Status badges */
+.badge-win {
+  background-color: var(--color-win);
+  color: #000;
+}
+.badge-draw {
+  background-color: var(--color-draw);
+  color: #000;
+}
+.badge-loss {
+  background-color: var(--color-loss);
+  color: #fff;
+}
+
+/* Admin panel base */
+.admin-layout {
+  background-color: var(--color-admin-bg);
+  color: #f9fafb;
+  min-height: 100vh;
+}
