@@ -1,1 +1,13 @@
-export default function AdminMatchesPage() { return <div className="p-8 text-white"><h1 className="text-2xl font-bold">Matches — coming in later stage</h1></div>; }
+import { adminSupabase } from "@/lib/supabase/admin";
+import MatchesClient from "./MatchesClient";
+
+export const dynamic = "force-dynamic";
+
+export default async function AdminMatchesPage() {
+  const { data: matches } = await adminSupabase
+    .from("matches")
+    .select("*")
+    .order("match_date", { ascending: false });
+
+  return <MatchesClient initialMatches={matches ?? []} />;
+}

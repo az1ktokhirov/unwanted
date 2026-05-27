@@ -2,30 +2,30 @@
 
 @theme {
   /* Public site palette */
-  --color-primary: #1a1a2e;
-  --color-secondary: #16213e;
-  --color-surface: #0f3460;
-  --color-accent: #e94560;
-  --color-accent2: #f5a623;
-  --color-win: #48bb78;
-  --color-draw: #a0aec0;
-  --color-loss: #e94560;
+  --color-primary:       #1a1a2e;
+  --color-secondary:     #16213e;
+  --color-surface:       #0f3460;
+  --color-accent:        #e94560;
+  --color-accent2:       #f5a623;
+  --color-win:           #48bb78;
+  --color-draw:          #a0aec0;
 
   /* Admin palette */
-  --color-admin-bg: #111827;
+  --color-admin-bg:      #111827;
   --color-admin-sidebar: #1f2937;
-  --color-admin-accent: #e94560;
-  --color-admin-border: #374151;
-  --color-admin-muted: #6b7280;
+  --color-admin-card:    #1f2937;
+  --color-admin-accent:  #e94560;
+  --color-admin-border:  #374151;
+  --color-admin-muted:   #6b7280;
+}
 
-  /* Typography */
-  --font-bebas: "Bebas Neue", sans-serif;
-  --font-inter: "Inter", sans-serif;
-  --font-mono: "Roboto Mono", monospace;
-
-  /* Shadows */
-  --shadow-card: 0 4px 24px 0 rgba(0, 0, 0, 0.4);
-  --shadow-panel: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+/* Font utilities — resolve next/font CSS variables */
+.font-bebas {
+  font-family: var(--font-bebas-neue, "Bebas Neue", cursive);
+  letter-spacing: 0.04em;
+}
+.font-score {
+  font-family: var(--font-roboto-mono, "Roboto Mono", monospace);
 }
 
 *,
@@ -39,54 +39,32 @@ html {
 }
 
 body {
-  background-color: var(--color-primary);
+  background-color: #1a1a2e;
   color: #ffffff;
-  font-family: var(--font-inter);
+  font-family: var(--font-inter-ub, "Inter", system-ui, sans-serif);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--color-primary);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--color-accent);
-  border-radius: 3px;
-}
+/* Thin accent scrollbar */
+::-webkit-scrollbar        { width: 4px; height: 4px; }
+::-webkit-scrollbar-track  { background: transparent; }
+::-webkit-scrollbar-thumb  { background: #e94560; border-radius: 2px; }
 
-/* Bebas Neue headings */
-.font-bebas {
-  font-family: var(--font-bebas);
-  letter-spacing: 0.02em;
-}
-
-/* Score / numeric display */
-.font-score {
-  font-family: var(--font-mono);
-}
-
-/* Status badges */
-.badge-win {
-  background-color: var(--color-win);
-  color: #000;
-}
-.badge-draw {
-  background-color: var(--color-draw);
-  color: #000;
-}
-.badge-loss {
-  background-color: var(--color-loss);
-  color: #fff;
-}
-
-/* Admin panel base */
+/* Admin body overrides */
 .admin-layout {
-  background-color: var(--color-admin-bg);
+  background-color: #111827;
   color: #f9fafb;
   min-height: 100vh;
+  font-family: var(--font-inter-ub, "Inter", system-ui, sans-serif);
+}
+
+/* Utility: full-bleed gradient overlay on hero images */
+.hero-overlay {
+  background: linear-gradient(
+    to right,
+    rgba(26, 26, 46, 0.95) 0%,
+    rgba(26, 26, 46, 0.7)  50%,
+    rgba(26, 26, 46, 0.2)  100%
+  );
 }
