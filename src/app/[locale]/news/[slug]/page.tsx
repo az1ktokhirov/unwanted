@@ -69,11 +69,24 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug, locale } = await params;
   const article = await getArticle(slug);
   if (!article) return { title: "Не найдено" };
-  const title = article[`title_${locale as Locale}`] || article.title_ru;
+  const title = (article as any)[`title_${locale}`] || article.title_ru;
+  const desc = (article as any)[`excerpt_${locale}`] || article.excerpt_ru || undefined;
   return {
     title,
-    description: article[`excerpt_${locale as Locale}`] || article.excerpt_ru || undefined,
-    openGraph: { images: article.cover_url ? [article.cover_url] : [] },
+    description: desc,
+    openGraph: {
+      title,
+      description: desc,
+      type: "article",
+      publishedTime: article.published_at ?? undefined,
+      images: article.cover_url ? [{ url: article.cover_url, width: 1200, height: 630 }] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: desc,
+      images: article.cover_url ? [article.cover_url] : [],
+    },
   };
 }
 

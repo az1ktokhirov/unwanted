@@ -91,8 +91,18 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id, locale } = await params;
   const player = await getPlayer(id);
   if (!player) return { title: "Игрок не найден" };
-  const name = player[`name_${locale as Locale}`] || player.name_ru;
-  return { title: name };
+  const name = (player as any)[`name_${locale}`] || player.name_ru;
+  const pos = (player as any)[`position_${locale}`] || player.position_ru;
+  const desc = `${name} — ${pos} Unwanted Boys FC`;
+  return {
+    title: name,
+    description: desc,
+    openGraph: {
+      title: name,
+      description: desc,
+      images: player.photo_url ? [{ url: player.photo_url, width: 400, height: 600 }] : [],
+    },
+  };
 }
 
 export default async function PlayerProfilePage({

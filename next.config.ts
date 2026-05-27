@@ -16,6 +16,24 @@ const nextConfig: NextConfig = {
         hostname: "img.youtube.com",
       },
     ],
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 86400,
+  },
+  experimental: {
+    optimizeCss: true,
+  },
+  compress: true,
+  poweredByHeader: false,
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "X-DNS-Prefetch-Control", value: "on" },
+          { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
+        ],
+      },
+    ];
   },
 };
 

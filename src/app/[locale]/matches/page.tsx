@@ -4,8 +4,19 @@ import MatchesClient from "@/components/public/MatchesClient";
 import type { Match } from "@/types";
 import type { Locale } from "@/types";
 
-export async function generateMetadata() {
-  return { title: "Матчи" };
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const titles: Record<string, string> = { uz: "O'yinlar", ru: "Матчи", en: "Matches" };
+  const descs: Record<string, string> = {
+    uz: "Unwanted Boys FC barcha o'yinlari, natijalar va jadvallar",
+    ru: "Все матчи Unwanted Boys FC — результаты, расписание, статистика",
+    en: "All Unwanted Boys FC matches — results, schedule, statistics",
+  };
+  return {
+    title: titles[locale] ?? "Матчи",
+    description: descs[locale],
+    openGraph: { title: titles[locale], description: descs[locale] },
+  };
 }
 
 async function getMatches(): Promise<{ upcoming: Match[]; previous: Match[] }> {

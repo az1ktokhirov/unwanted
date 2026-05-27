@@ -4,8 +4,19 @@ import NewsFilters from "@/components/public/NewsFilters";
 import type { News } from "@/types";
 import type { Locale } from "@/types";
 
-export async function generateMetadata() {
-  return { title: "Новости" };
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const titles: Record<string, string> = { uz: "Yangiliklar", ru: "Новости", en: "News" };
+  const descs: Record<string, string> = {
+    uz: "Unwanted Boys FC yangiliklari — oxirgi voqealar, intervyular va e'lonlar",
+    ru: "Новости Unwanted Boys FC — последние события, интервью и анонсы",
+    en: "Unwanted Boys FC news — latest events, interviews and announcements",
+  };
+  return {
+    title: titles[locale] ?? "Новости",
+    description: descs[locale],
+    openGraph: { title: titles[locale], description: descs[locale] },
+  };
 }
 
 async function getNews(): Promise<News[]> {

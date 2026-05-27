@@ -4,8 +4,19 @@ import TeamFilters from "@/components/public/TeamFilters";
 import type { Player } from "@/types";
 import type { Locale } from "@/types";
 
-export async function generateMetadata() {
-  return { title: "Команда" };
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const titles: Record<string, string> = { uz: "Jamoa", ru: "Команда", en: "Team" };
+  const descs: Record<string, string> = {
+    uz: "Unwanted Boys FC jamoasi — barcha o'yinchilar va ularning statistikasi",
+    ru: "Состав Unwanted Boys FC — игроки, позиции, статистика",
+    en: "Unwanted Boys FC squad — players, positions, statistics",
+  };
+  return {
+    title: titles[locale] ?? "Команда",
+    description: descs[locale],
+    openGraph: { title: titles[locale], description: descs[locale] },
+  };
 }
 
 async function getPlayers(): Promise<Player[]> {

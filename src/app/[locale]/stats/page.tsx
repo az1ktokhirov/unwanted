@@ -3,8 +3,19 @@ import { createClient } from "@/lib/supabase/server";
 import { ResultsLineChart, FormDonut } from "@/components/public/StatsCharts";
 import type { Locale } from "@/types";
 
-export async function generateMetadata() {
-  return { title: "Статистика" };
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const titles: Record<string, string> = { uz: "Statistika", ru: "Статистика", en: "Statistics" };
+  const descs: Record<string, string> = {
+    uz: "Unwanted Boys FC o'yinchi va jamoa statistikasi — gollar, assistlar, reytinglar",
+    ru: "Статистика Unwanted Boys FC — голы, ассисты, рейтинги игроков и команды",
+    en: "Unwanted Boys FC statistics — goals, assists, player and team ratings",
+  };
+  return {
+    title: titles[locale] ?? "Статистика",
+    description: descs[locale],
+    openGraph: { title: titles[locale], description: descs[locale] },
+  };
 }
 
 async function getTeamStats() {

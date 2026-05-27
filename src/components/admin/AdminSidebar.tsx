@@ -20,6 +20,7 @@ import {
   DatabaseBackup,
   LogOut,
   ChevronRight,
+  Trophy,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -38,6 +39,7 @@ const NAV_GROUPS = [
     label: "КОНТЕНТ",
     items: [
       { href: "/admin/matches", label: "Матчи", icon: Swords },
+      { href: "/admin/standings", label: "Таблица", icon: Trophy },
       { href: "/admin/players", label: "Игроки", icon: UserSquare2 },
       { href: "/admin/stats", label: "Статистика", icon: TrendingUp },
       { href: "/admin/news", label: "Новости", icon: Newspaper },

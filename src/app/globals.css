@@ -68,3 +68,65 @@ body {
     rgba(26, 26, 46, 0.2)  100%
   );
 }
+
+/* Page transitions */
+main {
+  animation: fadeIn 0.25s ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Smooth image loading */
+img {
+  transition: opacity 0.2s ease;
+}
+
+/* Focus visible ring — accessibility */
+:focus-visible {
+  outline: 2px solid #e94560;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Hide scrollbar on mobile carousels */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Prevent layout shift on images */
+img { height: auto; }
+
+/* Selection color */
+::selection {
+  background-color: rgba(233, 69, 96, 0.3);
+  color: #fff;
+}
+
+/* Admin table row hover */
+.admin-layout tr:hover td { background: rgba(255,255,255,0.02); }
+
+/* Line clamp utilities */
+.line-clamp-1 { -webkit-line-clamp: 1; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
+.line-clamp-2 { -webkit-line-clamp: 2; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
+.line-clamp-3 { -webkit-line-clamp: 3; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* MarkdownEditor dark theme override */
+.w-md-editor {
+  background-color: #1f2937 !important;
+  color: #f9fafb !important;
+}
+.w-md-editor-toolbar {
+  background-color: #111827 !important;
+  border-bottom-color: #374151 !important;
+}
+.w-md-editor-text-pre > code,
+.w-md-editor-text-input,
+.w-md-editor-text {
+  color: #f9fafb !important;
+  font-family: "Roboto Mono", monospace !important;
+}
+.wmde-markdown {
+  background-color: #1f2937 !important;
+  color: #f9fafb !important;
+}

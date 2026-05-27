@@ -10,6 +10,29 @@ import NewsCard from "@/components/public/NewsCard";
 import type { Match, Player, Media, News, LeagueStanding } from "@/types";
 import type { Locale } from "@/types";
 
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const titles: Record<string, string> = {
+    uz: "Unwanted Boys FC — O'zbekistonning eng mashhur media futbol klubi",
+    ru: "Unwanted Boys FC — Самый популярный медиафутбольный клуб Узбекистана",
+    en: "Unwanted Boys FC — Most Popular Media Football Club in Uzbekistan",
+  };
+  const descs: Record<string, string> = {
+    uz: "Unwanted Boys FC — 400K+ YouTube obunachilari bilan O'zbekistonning eng mashhur media futbol klubi",
+    ru: "Unwanted Boys FC — самый популярный медиафутбольный клуб Узбекистана. 400K+ YouTube подписчиков. Матчи, новости, статистика.",
+    en: "Unwanted Boys FC — the most popular media football club in Uzbekistan. 400K+ YouTube subscribers. Matches, news, statistics.",
+  };
+  return {
+    title: titles[locale] ?? titles.ru,
+    description: descs[locale] ?? descs.ru,
+    openGraph: {
+      title: titles[locale],
+      description: descs[locale],
+      url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://unwantedboys.uz"}/${locale}`,
+    },
+  };
+}
+
 async function getData(locale: Locale) {
   try {
     const supabase = await createClient();

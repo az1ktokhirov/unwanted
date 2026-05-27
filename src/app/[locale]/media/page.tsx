@@ -4,8 +4,19 @@ import MediaGrid from "@/components/public/MediaGrid";
 import type { Media } from "@/types";
 import type { Locale } from "@/types";
 
-export async function generateMetadata() {
-  return { title: "Медиа" };
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const titles: Record<string, string> = { uz: "Media", ru: "Медиа", en: "Media" };
+  const descs: Record<string, string> = {
+    uz: "Unwanted Boys FC videolari — o'yin highlights, vloglar va ortiqcha material",
+    ru: "Медиа Unwanted Boys FC — хайлайты матчей, влоги и закулисные видео",
+    en: "Unwanted Boys FC media — match highlights, vlogs and behind the scenes",
+  };
+  return {
+    title: titles[locale] ?? "Медиа",
+    description: descs[locale],
+    openGraph: { title: titles[locale], description: descs[locale] },
+  };
 }
 
 async function getVideos(): Promise<Media[]> {
