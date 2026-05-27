@@ -5,25 +5,18 @@ import { VisitorsChart } from "@/components/admin/DashboardCharts";
 
 export const dynamic = "force-dynamic";
 
-async function getDashboardData() {
-  const [
-    { count: playerCount },
-    { count: matchCount },
-    { count: newsCount },
-    { count: mediaCount },
-    { data: recentMatches },
-    { data: recentNews },
-    { data: activityLogs },
-  ] = await Promise.all([
-    adminSupabase.from("players").select("*", { count: "exact", head: true }).eq("is_active", true),
-    adminSupabase.from("matches").select("*", { count: "exact", head: true }),
-    adminSupabase.from("news").select("*", { count: "exact", head: true }),
-    adminSupabase.from("media").select("*", { count: "exact", head: true }),
-    adminSupabase.from("matches").select("opponent_ru, score_home, score_away, status, match_date, opponent_logo_url").order("match_date", { ascending: false }).limit(4),
-    adminSupabase.from("news").select("title_ru, cover_url, status, published_at").order("created_at", { ascending: false }).limit(4),
-    adminSupabase.from("activity_logs").select("action, module, description, created_at").order("created_at", { ascending: false }).limit(8),
-  ]);
+const EMPTY_DATA = {
+  playerCount: 0,
+  matchCount: 0,
+  newsCount: 0,
+  mediaCount: 0,
+  recentMatches: [] as any[],
+  recentNews: [] as any[],
+  activityLogs: [] as any[],
+  chartData: [] as { date: string; visitors: number; views: number }[],
+};
 
+async function getDashboardData() {
   const chartData = Array.from({ length: 14 }, (_, i) => {
     const d = new Date();
     d.setDate(d.getDate() - (13 - i));
@@ -34,16 +27,35 @@ async function getDashboardData() {
     };
   });
 
-  return {
-    playerCount: playerCount ?? 0,
-    matchCount: matchCount ?? 0,
-    newsCount: newsCount ?? 0,
-    mediaCount: mediaCount ?? 0,
-    recentMatches: recentMatches ?? [],
-    recentNews: recentNews ?? [],
-    activityLogs: activityLogs ?? [],
-    chartData,
-  };
+  try {
+    const results = await Promise.allSettled([
+      adminSupabase.from("players").select("*", { count: "exact", head: true }).eq("is_active", true),
+      adminSupabase.from("matches").select("*", { count: "exact", head: true }),
+      adminSupabase.from("news").select("*", { count: "exact", head: true }),
+      adminSupabase.from("media").select("*", { count: "exact", head: true }),
+      adminSupabase.from("matches").select("opponent_ru, score_home, score_away, status, match_date, opponent_logo_url").order("match_date", { ascending: false }).limit(4),
+      adminSupabase.from("news").select("title_ru, cover_url, status, published_at").order("created_at", { ascending: false }).limit(4),
+      adminSupabase.from("activity_logs").select("action, module, description, created_at").order("created_at", { ascending: false }).limit(8),
+    ]);
+
+    const val = <T,>(r: PromiseSettledResult<{ data: T | null; count?: number | null }>, fallback: T) =>
+      r.status === "fulfilled" ? (r.value.data ?? fallback) : fallback;
+    const cnt = (r: PromiseSettledResult<{ count: number | null }>) =>
+      r.status === "fulfilled" ? (r.value.count ?? 0) : 0;
+
+    return {
+      playerCount: cnt(results[0] as any),
+      matchCount: cnt(results[1] as any),
+      newsCount: cnt(results[2] as any),
+      mediaCount: cnt(results[3] as any),
+      recentMatches: val<any[]>(results[4] as any, []),
+      recentNews: val<any[]>(results[5] as any, []),
+      activityLogs: val<any[]>(results[6] as any, []),
+      chartData,
+    };
+  } catch {
+    return { ...EMPTY_DATA, chartData };
+  }
 }
 
 const ACTION_COLOR: Record<string, string> = {

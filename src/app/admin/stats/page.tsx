@@ -7,15 +7,20 @@ import StatWidget from "@/components/admin/StatWidget";
 export const dynamic = "force-dynamic";
 
 export default async function AdminStatsPage() {
-  const { data: players } = await adminSupabase
-    .from("players")
-    .select("id, name_ru, photo_url, position_ru, number")
-    .eq("is_active", true)
-    .order("number");
-
-  const { data: statsRaw } = await adminSupabase
-    .from("player_stats")
-    .select("player_id, goals, assists, yellow_cards, red_cards, minutes_played, rating");
+  let players = null;
+  let statsRaw = null;
+  try {
+    [{ data: players }, { data: statsRaw }] = await Promise.all([
+      adminSupabase
+        .from("players")
+        .select("id, name_ru, photo_url, position_ru, number")
+        .eq("is_active", true)
+        .order("number"),
+      adminSupabase
+        .from("player_stats")
+        .select("player_id, goals, assists, yellow_cards, red_cards, minutes_played, rating"),
+    ]);
+  } catch { /* Supabase unavailable */ }
 
   const statsMap = new Map<string, { goals: number; assists: number; yellow: number; red: number; minutes: number; rating: number; games: number }>();
   for (const s of (statsRaw ?? [])) {

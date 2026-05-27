@@ -4,10 +4,13 @@ import MediaClient from "./MediaClient";
 export const dynamic = "force-dynamic";
 
 export default async function AdminMediaPage() {
-  const { data: media } = await adminSupabase
-    .from("media")
-    .select("*")
-    .order("published_at", { ascending: false });
+  let media = null;
+  try {
+    ({ data: media } = await adminSupabase
+      .from("media")
+      .select("*")
+      .order("published_at", { ascending: false }));
+  } catch { /* Supabase unavailable */ }
 
   return <MediaClient initialMedia={media ?? []} />;
 }

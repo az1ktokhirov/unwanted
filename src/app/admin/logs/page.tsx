@@ -20,11 +20,14 @@ const STATUS_COLOR: Record<string, string> = {
 };
 
 export default async function AdminLogsPage() {
-  const { data: logs } = await adminSupabase
-    .from("activity_logs")
-    .select("*, admin_users(full_name, email)")
-    .order("created_at", { ascending: false })
-    .limit(100);
+  let logs = null;
+  try {
+    ({ data: logs } = await adminSupabase
+      .from("activity_logs")
+      .select("*, admin_users(full_name, email)")
+      .order("created_at", { ascending: false })
+      .limit(100));
+  } catch { /* Supabase unavailable */ }
 
   const all = logs ?? [];
   const success = all.filter((l) => l.status === "success").length;

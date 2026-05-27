@@ -10,14 +10,18 @@ export const dynamic = "force-dynamic";
 export default async function PlayerStatsDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  const [{ data: player }, { data: statsRaw }] = await Promise.all([
-    adminSupabase.from("players").select("*").eq("id", id).single(),
-    adminSupabase
-      .from("player_stats")
-      .select("*, matches(opponent_ru, match_date, score_home, score_away, status)")
-      .eq("player_id", id)
-      .order("matches(match_date)", { ascending: false }),
-  ]);
+  let player = null;
+  let statsRaw = null;
+  try {
+    [{ data: player }, { data: statsRaw }] = await Promise.all([
+      adminSupabase.from("players").select("*").eq("id", id).single(),
+      adminSupabase
+        .from("player_stats")
+        .select("*, matches(opponent_ru, match_date, score_home, score_away, status)")
+        .eq("player_id", id)
+        .order("matches(match_date)", { ascending: false }),
+    ]);
+  } catch { /* Supabase unavailable */ }
 
   if (!player) notFound();
 

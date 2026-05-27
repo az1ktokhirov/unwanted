@@ -14,10 +14,13 @@ const ROLE_COLORS: Record<string, string> = {
 };
 
 export default async function AdminUsersPage() {
-  const { data: users } = await adminSupabase
-    .from("admin_users")
-    .select("*")
-    .order("created_at", { ascending: false });
+  let users = null;
+  try {
+    ({ data: users } = await adminSupabase
+      .from("admin_users")
+      .select("*")
+      .order("created_at", { ascending: false }));
+  } catch { /* Supabase unavailable */ }
 
   const all = users ?? [];
   const active = all.filter((u) => u.is_active).length;

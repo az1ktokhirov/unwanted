@@ -4,10 +4,13 @@ import PagesClient from "./PagesClient";
 export const dynamic = "force-dynamic";
 
 export default async function AdminPagesPage() {
-  const { data: pages } = await adminSupabase
-    .from("pages")
-    .select("*")
-    .order("slug");
+  let pages = null;
+  try {
+    ({ data: pages } = await adminSupabase
+      .from("pages")
+      .select("*")
+      .order("slug"));
+  } catch { /* Supabase unavailable */ }
 
   return <PagesClient initialPages={pages ?? []} />;
 }
