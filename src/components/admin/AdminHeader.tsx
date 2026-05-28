@@ -1,15 +1,12 @@
 "use client";
 
 import { Bell } from "lucide-react";
-import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 
 export default function AdminHeader({ userName, userRole }: { userName?: string; userRole?: string }) {
   return (
     <header className="h-14 border-b border-admin-border bg-admin-sidebar flex items-center justify-between px-6 flex-shrink-0">
       <div />
       <div className="flex items-center gap-4">
-        <LanguageSwitcher variant="admin" />
-
         <button className="relative p-1.5 text-[#9ca3af] hover:text-white transition-colors">
           <Bell size={18} />
           <span className="absolute top-0.5 right-0.5 w-2 h-2 bg-admin-accent rounded-full" />
